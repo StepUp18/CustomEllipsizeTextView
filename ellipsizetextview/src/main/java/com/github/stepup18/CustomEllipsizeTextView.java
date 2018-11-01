@@ -186,8 +186,8 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         this.ellipsizeText = ellipsizeText;
     }
 
-    public void setEllipsizeIndex(int mEllipsizeIndex) {
-        this.ellipsizeIndex = mEllipsizeIndex;
+    public void setEllipsizeIndex(int ellipsizeIndex) {
+        this.ellipsizeIndex = ellipsizeIndex;
     }
 
     public static final class Range<T extends Comparable<? super T>> {
