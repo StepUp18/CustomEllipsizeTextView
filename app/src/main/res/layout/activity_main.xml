@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:padding="16dp"
+    android:background="@android:color/holo_blue_light"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.github.stepup18.CustomEllipsizeTextView
+        android:id="@+id/firstTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:maxLines="3"
+        android:text="идентификатор категории (0 – популярное, 1 – шоу, 2 – сериалы, 3 – программы, 4 – фильмы, 5 – мультфильмы). Параметр не является обязательным.
+Выдача результатов запроса по параметру category_id настроена в соответствии с тем, как заданы категории для видеороликов конкретного Партнера. Если в запросе отсутствует параметр category_id, ответ будет содержать информацию о контенте всех категорий, кроме популярное. Содержимое категории “Популярное” (“0”) выводится в ответе только, если в запросе присутствует соответствующее значение category_id=“0”. Причем категории контента соответствуют тем, которые заданы в настройках данного Партнера (вкладка Управление проектами на странице редактирования Партнера системы администрирования Videomore)"
+        android:textColor="@android:color/black"
+        app:ellipsizeColor="@android:color/holo_green_dark"
+        app:ellipsizeText="… Далее"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
