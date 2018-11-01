@@ -3,5 +3,6 @@
     <declare-styleable name="CustomEllipsizeTextView">
         <attr name="ellipsizeText" format="string|reference"/>
         <attr name="ellipsizeIndex" format="integer|reference"/>
+        <attr name="ellipsizeColor" format="color"/>
     </declare-styleable>
 </resources>

@@ -1,12 +1,16 @@
 package com.github.stepup18;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
     private CharSequence originalText;
     private int ellipsizeIndex;
     private int maxLines;
+    private int ellipsizeColor;
     private boolean isExactlyMode;
     private boolean enableUpdateOriginText;
 
@@ -29,12 +34,13 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
 
     public CustomEllipsizeTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.enableUpdateOriginText = true;
+        enableUpdateOriginText = true;
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomEllipsizeTextView);
-        this.ellipsizeIndex = typedArray.getInt(R.styleable.CustomEllipsizeTextView_ellipsizeIndex, 0);
-        this.ellipsizeText = typedArray.getText(R.styleable.CustomEllipsizeTextView_ellipsizeText);
-        if (this.ellipsizeText == null) {
-            this.ellipsizeText = "...";
+        ellipsizeIndex = typedArray.getInt(R.styleable.CustomEllipsizeTextView_ellipsizeIndex, 0);
+        ellipsizeText = typedArray.getText(R.styleable.CustomEllipsizeTextView_ellipsizeText);
+        ellipsizeColor = typedArray.getColor(R.styleable.CustomEllipsizeTextView_ellipsizeColor, ContextCompat.getColor(context, android.R.color.holo_red_dark));
+        if (ellipsizeText == null) {
+            ellipsizeText = "...";
         }
         typedArray.recycle();
     }
@@ -47,19 +53,18 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        this.setText(this.originalText);
+        this.setText(originalText);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         try {
-            this.isExactlyMode = MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY;
-            Layout layout = this.getLayout();
-            if (layout != null && (this.isExceedMaxLine(layout) || this.isOutOfBounds(layout))) {
-                this.adjustEllipsizeEndText(layout);
+           isExactlyMode = MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY;
+            Layout layout = getLayout();
+            if (layout != null && (isExceedMaxLine(layout) || isOutOfBounds(layout))) {
+                adjustEllipsizeEndText(layout);
                 setTag(layout.getLineCount());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     public void setText(CharSequence text, BufferType type) {
@@ -72,42 +77,52 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         }
     }
 
+    private void setEllipsizeColor() {
+        if (!TextUtils.isEmpty(ellipsizeText)) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(ellipsizeText);
+            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ellipsizeColor);
+            spannableStringBuilder.setSpan(foregroundColorSpan, spannableStringBuilder.toString().indexOf("Далее"), ellipsizeText.toString().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            setEllipsizeText(spannableStringBuilder);
+        }
+    }
+
     private boolean isExceedMaxLine(Layout layout) {
-        return layout.getLineCount() > this.maxLines && this.maxLines > 0;
+        return layout.getLineCount() > maxLines && maxLines > 0;
     }
 
     private boolean isOutOfBounds(Layout layout) {
-        return layout.getHeight() > this.getMeasuredHeight() - this.getPaddingBottom() - this.getPaddingTop();
+        return layout.getHeight() > getMeasuredHeight() - getPaddingBottom() - getPaddingTop();
     }
 
     private void adjustEllipsizeEndText(Layout layout) {
         String originalText = ((String) this.originalText).replaceAll("\\n", " ");
-        CharSequence restSuffixText = originalText.subSequence(originalText.length() - this.ellipsizeIndex, originalText.length());
-        int width = layout.getWidth() - this.getPaddingLeft() - this.getPaddingRight();
-        int maxLineCount = Math.max(1, this.computeMaxLineCount(layout));
+        CharSequence restSuffixText = originalText.subSequence(originalText.length() - ellipsizeIndex, originalText.length());
+        int width = layout.getWidth() - getPaddingLeft() - getPaddingRight();
+        int maxLineCount = Math.max(1, computeMaxLineCount(layout));
         if (maxLineCount < 2) {
             maxLineCount = 2;
         }
         int lastLineWidth = (int) layout.getLineWidth(maxLineCount - 1);
         int lastCharacterIndex = layout.getLineEnd(maxLineCount - 1);
-        int suffixWidth = (int) (Layout.getDesiredWidth(this.ellipsizeText, this.getPaint()) + Layout.getDesiredWidth(restSuffixText, this.getPaint())) + 1;
+        int suffixWidth = (int) (Layout.getDesiredWidth(ellipsizeText, getPaint()) + Layout.getDesiredWidth(restSuffixText, getPaint())) + 1;
         this.enableUpdateOriginText = false;
         if (lastLineWidth + suffixWidth > width) {
             int widthDiff = lastLineWidth + suffixWidth - width;
-            int removedCharacterCount = this.computeRemovedEllipsizeEndCharacterCount(widthDiff, originalText.subSequence(0, lastCharacterIndex));
-            this.setText(originalText.subSequence(0, lastCharacterIndex - removedCharacterCount));
-            this.append(this.ellipsizeText);
-            this.append(restSuffixText);
+            int removedCharacterCount = computeRemovedEllipsizeEndCharacterCount(widthDiff, originalText.subSequence(0, lastCharacterIndex));
+            setText(originalText.subSequence(0, lastCharacterIndex - removedCharacterCount));
+            append(ellipsizeText);
+            append(restSuffixText);
         } else {
-            this.setText(originalText.subSequence(0, lastCharacterIndex));
-            this.append(this.ellipsizeText);
-            this.append(restSuffixText);
+            setText(originalText.subSequence(0, lastCharacterIndex));
+            append(ellipsizeText);
+            append(restSuffixText);
         }
-        this.enableUpdateOriginText = true;
+        setEllipsizeColor();
+        enableUpdateOriginText = true;
     }
 
     private int computeMaxLineCount(Layout layout) {
-        int availableHeight = this.getMeasuredHeight() - this.getPaddingTop() - this.getPaddingBottom();
+        int availableHeight = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
         for (int i = 0; i < layout.getLineCount(); ++i) {
             if (availableHeight < layout.getLineBottom(i)) {
                 return i;
@@ -124,10 +139,10 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
             String textStr = text.toString();
             int characterIndex;
             int codePointIndex = textStr.codePointCount(0, text.length());
-            for (int currentRemovedWidth = 0; codePointIndex > 0 && widthDiff > currentRemovedWidth; currentRemovedWidth = (int) Layout.getDesiredWidth(text.subSequence(characterIndex, text.length()), this.getPaint())) {
+            for (int currentRemovedWidth = 0; codePointIndex > 0 && widthDiff > currentRemovedWidth; currentRemovedWidth = (int) Layout.getDesiredWidth(text.subSequence(characterIndex, text.length()), getPaint())) {
                 --codePointIndex;
                 characterIndex = textStr.offsetByCodePoints(0, codePointIndex);
-                Range<Integer> characterStyleRange = this.computeCharacterStyleRange(characterStyleRanges, characterIndex);
+                Range<Integer> characterStyleRange = computeCharacterStyleRange(characterStyleRanges, characterIndex);
                 if (characterStyleRange != null) {
                     characterIndex = characterStyleRange.getLower();
                     codePointIndex = textStr.codePointCount(0, characterIndex);
@@ -179,7 +194,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         private final T lower;
         private final T upper;
 
-        public Range(T lower, T upper) {
+        Range(T lower, T upper) {
             this.lower = lower;
             this.upper = upper;
             if (lower.compareTo(upper) > 0) {
@@ -187,15 +202,15 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
             }
         }
 
-        public T getLower() {
+        T getLower() {
             return this.lower;
         }
 
-        public T getUpper() {
+        T getUpper() {
             return this.upper;
         }
 
-        public boolean contains(T value) {
+        boolean contains(T value) {
             boolean gteLower = value.compareTo(this.lower) >= 0;
             boolean lteUpper = value.compareTo(this.upper) < 0;
             return gteLower && lteUpper;
