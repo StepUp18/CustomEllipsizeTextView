@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class CustomEllipsizeTextView extends AppCompatTextView {
+
     public static final int UNIVERSAL_MEASURE_POSITION_VALUE = 1073741824;
     private CharSequence mEllipsizeText;
     private CharSequence mOriginText;
@@ -37,7 +38,6 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         if (this.mEllipsizeText == null) {
             this.mEllipsizeText = "...";
         }
-
         ta.recycle();
     }
 
@@ -46,15 +46,12 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
             super.setMaxLines(maxLines);
             this.mMaxLines = maxLines;
         }
-
     }
 
     @SuppressLint("WrongConstant")
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         this.setText(this.mOriginText);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        //Чтобы ellipsize мог появляться независимо от позиции последней строки (начало, середина и конец)
         try {
             this.mIsExactlyMode = MeasureSpec.getMode(widthMeasureSpec) == UNIVERSAL_MEASURE_POSITION_VALUE;
             Layout layout = this.getLayout();
@@ -72,12 +69,10 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         if (this.mEnableUpdateOriginText) {
             this.mOriginText = text;
         }
-
         super.setText(text, type);
         if (this.mIsExactlyMode) {
             this.requestLayout();
         }
-
     }
 
     private boolean isExceedMaxLine(Layout layout) {
@@ -111,19 +106,16 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
             this.append(this.mEllipsizeText);
             this.append(restSuffixText);
         }
-
         this.mEnableUpdateOriginText = true;
     }
 
     private int computeMaxLineCount(Layout layout) {
         int availableHeight = this.getMeasuredHeight() - this.getPaddingTop() - this.getPaddingBottom();
-
         for (int i = 0; i < layout.getLineCount(); ++i) {
             if (availableHeight < layout.getLineBottom(i)) {
                 return i;
             }
         }
-
         return layout.getLineCount();
     }
 
@@ -135,7 +127,6 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
             String textStr = text.toString();
             int characterIndex;
             int codePointIndex = textStr.codePointCount(0, text.length());
-
             for (int currentRemovedWidth = 0; codePointIndex > 0 && widthDiff > currentRemovedWidth; currentRemovedWidth = (int) Layout.getDesiredWidth(text.subSequence(characterIndex, text.length()), this.getPaint())) {
                 --codePointIndex;
                 characterIndex = textStr.offsetByCodePoints(0, codePointIndex);
@@ -145,24 +136,20 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
                     codePointIndex = textStr.codePointCount(0, characterIndex);
                 }
             }
-
             return text.length() - textStr.offsetByCodePoints(0, codePointIndex);
         }
     }
 
     private Range<Integer> computeCharacterStyleRange(List<Range<Integer>> characterStyleRanges, int index) {
         if (characterStyleRanges != null && !characterStyleRanges.isEmpty()) {
-            Iterator var3 = characterStyleRanges.iterator();
-
+            Iterator iterator = characterStyleRanges.iterator();
             Range characterStyleRange;
             do {
-                if (!var3.hasNext()) {
+                if (!iterator.hasNext()) {
                     return null;
                 }
-
-                characterStyleRange = (Range) var3.next();
+                characterStyleRange = (Range) iterator.next();
             } while (!characterStyleRange.contains(index));
-
             return characterStyleRange;
         } else {
             return null;
@@ -170,21 +157,16 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
     }
 
     private List<Range<Integer>> computeCharacterStyleRanges(CharSequence text) {
-        SpannableStringBuilder ssb = SpannableStringBuilder.valueOf(text);
-        CharacterStyle[] characterStyles = ssb.getSpans(0, ssb.length(), CharacterStyle.class);
+        SpannableStringBuilder stringBuilder = SpannableStringBuilder.valueOf(text);
+        CharacterStyle[] characterStyles = stringBuilder.getSpans(0, stringBuilder.length(), CharacterStyle.class);
         if (characterStyles != null && characterStyles.length != 0) {
-            List<Range<Integer>> ranges = new ArrayList();
-            CharacterStyle[] var5 = characterStyles;
-            int var6 = characterStyles.length;
-
-            for (int var7 = 0; var7 < var6; ++var7) {
-                CharacterStyle characterStyle = var5[var7];
-                ranges.add(new Range(Integer.valueOf(ssb.getSpanStart(characterStyle)), Integer.valueOf(ssb.getSpanEnd(characterStyle))));
+            List<Range<Integer>> ranges = new ArrayList<>();
+            for (CharacterStyle characterStyle : characterStyles) {
+                ranges.add(new Range(stringBuilder.getSpanStart(characterStyle), stringBuilder.getSpanEnd(characterStyle)));
             }
-
             return ranges;
         } else {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
     }
 
