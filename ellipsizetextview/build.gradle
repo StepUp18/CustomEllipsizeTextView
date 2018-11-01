@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
@@ -28,21 +27,12 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
 }
 
-publishing {
-    publications {
-        Production(MavenPublication) {
-            version this.version
-        }
-    }
-}
-
-bintray {
-    user = 'stepup18'
-    key = '9a1432012ea62fa86efe494563e5e26b2d14f2dc'
-    pkg {
-        repo = 'customellipsizetextview'
-        name = 'customellipsizetextview'
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/StepUp18/CustomEllipsizeTextView.git'
-    }
+publish {
+    groupId = 'com.github.stepup18'
+    repoName = 'customellipsizetextview'
+    artifactId = 'customellipsizetextview'
+    publishVersion = '1.0.0'
+    desc = 'Custom text view with any ellipsize'
+    licences = ['MIT']
+    website = 'https://github.com/StepUp18/CustomEllipsizeTextView'
 }
