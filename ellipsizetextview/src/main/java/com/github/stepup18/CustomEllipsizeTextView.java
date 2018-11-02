@@ -2,6 +2,7 @@ package com.github.stepup18;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
@@ -55,7 +56,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         this.setText(originalText);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         try {
-           isExactlyMode = MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY;
+            isExactlyMode = MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY;
             Layout layout = getLayout();
             if (layout != null && (isExceedMaxLine(layout) || isOutOfBounds(layout))) {
                 adjustEllipsizeEndText(layout);
@@ -183,10 +184,24 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
 
     public void setEllipsizeText(CharSequence ellipsizeText) {
         this.ellipsizeText = ellipsizeText;
+        requestLayout();
+    }
+
+    public CharSequence getEllipsizeText() {
+        return ellipsizeText;
     }
 
     public void setEllipsizeIndex(int ellipsizeIndex) {
         this.ellipsizeIndex = ellipsizeIndex;
+    }
+
+    public void setEllipsizeColor(@ColorInt int ellipsizeColor) {
+        this.ellipsizeColor = ellipsizeColor;
+        requestLayout();
+    }
+
+    public int getEllipsizeColor() {
+        return ellipsizeColor;
     }
 
     public static final class Range<T extends Comparable<? super T>> {

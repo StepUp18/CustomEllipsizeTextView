@@ -1,7 +1,9 @@
 package com.github.customellipsizetextview;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.github.stepup18.CustomEllipsizeTextView;
 
@@ -13,22 +15,43 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.firstTextView)
     CustomEllipsizeTextView firstTextView;
+    @BindView(R.id.secondTextView)
+    CustomEllipsizeTextView secondTextView;
+    @BindView(R.id.thirdTextView)
+    CustomEllipsizeTextView thirdTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        firstTextView.setText("идентификатор категории (0 – популярное, 1 – шоу, 2 – сериалы, 3 – программы, 4 – фильмы, 5 – мультфильмы). Параметр не является обязательным.\n" +
-                "Выдача результатов запроса по параметру category_id настроена в соответствии с тем, как заданы категории для видеороликов конкретного Партнера. Если в запросе отсутствует параметр category_id, ответ будет содержать информацию о контенте всех категорий, кроме популярное. Содержимое категории “Популярное” (“0”) выводится в ответе только, если в запросе присутствует соответствующее значение category_id=“0”. Причем категории контента соответствуют тем, которые заданы в настройках данного Партнера (вкладка Управление проектами на странице редактирования Партнера системы администрирования Videomore)");
+        firstTextView.setText(getString(R.string.firstText));
+        secondTextView.setText(getString(R.string.secondText));
+        thirdTextView.setText(getString(R.string.thirdText));
     }
 
-    @OnClick(R.id.firstTextView)
-    public void onViewClicked() {
-        if (firstTextView.getMaxLines() == Integer.MAX_VALUE) {
-            firstTextView.setMaxLines(3);
-        } else {
-            firstTextView.setMaxLines(Integer.MAX_VALUE);
+    @OnClick({R.id.firstTextView, R.id.secondTextView, R.id.thirdTextView})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.firstTextView: {
+                if (firstTextView.getMaxLines() == Integer.MAX_VALUE) {
+                    firstTextView.setMaxLines(3);
+                } else {
+                    firstTextView.setMaxLines(Integer.MAX_VALUE);
+                }
+                break;
+            }
+            case R.id.secondTextView:
+                if (secondTextView.getEllipsizeColor() == ContextCompat.getColor(this, android.R.color.black)) {
+                    secondTextView.setEllipsizeColor(ContextCompat.getColor(this, android.R.color.holo_green_light));
+                } else {
+                    secondTextView.setEllipsizeColor(ContextCompat.getColor(this, android.R.color.black));
+                }
+                break;
+            case R.id.thirdTextView:
+                break;
+            default:
+                break;
         }
     }
 }
