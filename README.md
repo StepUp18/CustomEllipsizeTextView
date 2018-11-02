@@ -30,14 +30,14 @@ Use it via xml
             android:layout_marginBottom="16dp"
             android:maxLines="3"
             android:textColor="@android:color/black"
-            app:ellipsizeColor="@android:color/holo_green_dark"
+            app:ellipsizeColor="@android:color/white"
             app:ellipsizeText="...More"/>
 ```
 
 Or you can make the same via code
 
 ```          
-textView.setEllipsizeColor(ContextCompat.getColor(this, android.R.color.white));
+textView.setEllipsizeColor(ContextCompat.getColor(context, android.R.color.white));
 textView.setEllipsizeText("...More", Typeface.BOLD); // Yeah, you can change ellipsize textStyle ;) 
 ```
 
