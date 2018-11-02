@@ -37,7 +37,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomEllipsizeTextView);
         ellipsizeIndex = typedArray.getInt(R.styleable.CustomEllipsizeTextView_ellipsizeIndex, 0);
         ellipsizeText = typedArray.getText(R.styleable.CustomEllipsizeTextView_ellipsizeText);
-        ellipsizeColor = typedArray.getColor(R.styleable.CustomEllipsizeTextView_ellipsizeColor, ContextCompat.getColor(context, android.R.color.white));
+        ellipsizeColor = typedArray.getColor(R.styleable.CustomEllipsizeTextView_ellipsizeColor, ContextCompat.getColor(context, android.R.color.black));
         if (ellipsizeText == null) {
             ellipsizeText = "...";
         }
@@ -67,12 +67,12 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
     }
 
     public void setText(CharSequence text, BufferType type) {
-        if (this.enableUpdateOriginText) {
-            this.originalText = text;
+        if (enableUpdateOriginText) {
+            originalText = text;
         }
         super.setText(text, type);
-        if (this.isExactlyMode) {
-            this.requestLayout();
+        if (isExactlyMode) {
+            requestLayout();
         }
     }
 
