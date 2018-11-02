@@ -197,7 +197,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
 
     public void setEllipsizeColor(@ColorInt int ellipsizeColor) {
         this.ellipsizeColor = ellipsizeColor;
-        requestLayout();
+        setEllipsizeColor();
     }
 
     public int getEllipsizeColor() {
