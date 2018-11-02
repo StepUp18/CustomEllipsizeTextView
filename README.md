@@ -38,17 +38,17 @@ Or you can make the same via code
 
 ```          
 textView.setEllipsizeColor(ContextCompat.getColor(this, android.R.color.white));
-textView.setEllipsizeText(getString(R.string.ellipsizeForReplace), Typeface.BOLD); // Yeah, you can change ellipsize textStyle ;) 
+textView.setEllipsizeText("...More", Typeface.BOLD); // Yeah, you can change ellipsize textStyle ;) 
 ```
 
-<img src="https://user-images.githubusercontent.com/44642515/47911836-f96b4500-deaf-11e8-96ad-1b5847094462.gif" width="260" height="400" />
+<img src="https://user-images.githubusercontent.com/44642515/47911836-f96b4500-deaf-11e8-96ad-1b5847094462.gif" width="260" height="460" />
 
 ## Known problems
 
 ```android:text``` doesn't work, will be fixed later.
 
 ## Links
-Based on [this](https://github.com/dinuscxj/EllipsizeTextView) abandoned project with approvements and new features.
+Based on [this](https://github.com/dinuscxj/EllipsizeTextView) abandoned project with improvements and new features.
 
 ## Licence
 
