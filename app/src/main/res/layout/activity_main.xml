@@ -21,7 +21,7 @@
             android:maxLines="3"
             android:textColor="@android:color/black"
             app:ellipsizeColor="@android:color/holo_green_dark"
-            app:ellipsizeText="…Далее"/>
+            app:ellipsizeText="@string/ellipsizeDefault"/>
 
         <com.github.stepup18.CustomEllipsizeTextView
             android:id="@+id/secondTextView"
@@ -30,8 +30,7 @@
             android:layout_marginBottom="16dp"
             android:maxLines="3"
             android:textColor="@android:color/black"
-            app:ellipsizeColor="@android:color/holo_red_dark"
-            app:ellipsizeText="…Далее"/>
+            app:ellipsizeText="@string/ellipsizeDefault"/>
 
         <com.github.stepup18.CustomEllipsizeTextView
             android:id="@+id/thirdTextView"
@@ -40,7 +39,7 @@
             android:layout_marginBottom="16dp"
             android:maxLines="3"
             android:textColor="@android:color/black"
-            app:ellipsizeText="@string/ellipsize_default"/>
+            app:ellipsizeText="@string/ellipsizeDefault"/>
 
     </LinearLayout>
 </ScrollView>
