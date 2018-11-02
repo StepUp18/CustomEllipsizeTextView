@@ -1,6 +1,5 @@
 package com.github.stepup18;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.content.ContextCompat;
@@ -38,7 +37,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomEllipsizeTextView);
         ellipsizeIndex = typedArray.getInt(R.styleable.CustomEllipsizeTextView_ellipsizeIndex, 0);
         ellipsizeText = typedArray.getText(R.styleable.CustomEllipsizeTextView_ellipsizeText);
-        ellipsizeColor = typedArray.getColor(R.styleable.CustomEllipsizeTextView_ellipsizeColor, ContextCompat.getColor(context, android.R.color.holo_red_dark));
+        ellipsizeColor = typedArray.getColor(R.styleable.CustomEllipsizeTextView_ellipsizeColor, ContextCompat.getColor(context, android.R.color.white));
         if (ellipsizeText == null) {
             ellipsizeText = "...";
         }
