@@ -11,6 +11,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
@@ -20,8 +21,11 @@ import java.util.List;
 
 public class CustomEllipsizeTextView extends AppCompatTextView {
 
+    public static final String DEFAULT_ELLIPSIZE_SEPARATOR_REGEX = "([a-zA-Z]|[а-яА-Я])";
+
     private CharSequence ellipsizeText;
     private CharSequence originalText;
+    private String separatorRegex;
     private int ellipsizeIndex;
     private int maxLines;
     private int ellipsizeColor;
@@ -42,6 +46,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         if (ellipsizeText == null) {
             ellipsizeText = "...";
         }
+        separatorRegex = DEFAULT_ELLIPSIZE_SEPARATOR_REGEX;
         typedArray.recycle();
     }
 
@@ -187,6 +192,20 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         requestLayout();
     }
 
+    public void setEllipsizeText(String ellipsizeText, Integer typeface) {
+        if (!TextUtils.isEmpty(ellipsizeText)) {
+            String[] separateEllipsize = ellipsizeText.split(separatorRegex);
+            String newEllipsizeText = ellipsizeText.substring(separateEllipsize[0].length(), ellipsizeText.length());
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(ellipsizeText);
+            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ellipsizeColor);
+            if (typeface != null) {
+                spannableStringBuilder.setSpan(new StyleSpan(typeface), spannableStringBuilder.toString().indexOf(newEllipsizeText), newEllipsizeText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            spannableStringBuilder.setSpan(foregroundColorSpan, spannableStringBuilder.toString().indexOf(newEllipsizeText), newEllipsizeText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            setEllipsizeText(spannableStringBuilder);
+        }
+    }
+
     public CharSequence getEllipsizeText() {
         return ellipsizeText;
     }
@@ -203,6 +222,16 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
     public int getEllipsizeColor() {
         return ellipsizeColor;
     }
+
+    //If you need specific regex
+    public void setSeparatorRegex(String separatorRegex) {
+        this.separatorRegex = separatorRegex;
+    }
+
+    public String getSeparatorRegex() {
+        return separatorRegex;
+    }
+
 
     public static final class Range<T extends Comparable<? super T>> {
         private final T lower;
