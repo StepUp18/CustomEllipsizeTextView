@@ -31,7 +31,7 @@ publish {
     groupId = 'com.github.stepup18'
     repoName = 'customellipsizetextview'
     artifactId = 'customellipsizetextview'
-    publishVersion = '1.2.0'
+    publishVersion = '1.3.0'
     desc = 'Custom text view with any ellipsize'
     licences = ['MIT']
     website = 'https://github.com/StepUp18/CustomEllipsizeTextView'
