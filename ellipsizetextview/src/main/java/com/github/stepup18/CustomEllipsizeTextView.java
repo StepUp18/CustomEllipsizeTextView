@@ -73,7 +73,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
     }
 
     public void setText(CharSequence text, BufferType type) {
-        if (enableUpdateOriginText) {
+        if (enableUpdateOriginText || TextUtils.isEmpty(originalText)) {
             originalText = text;
         }
         super.setText(text, type);
@@ -110,7 +110,7 @@ public class CustomEllipsizeTextView extends AppCompatTextView {
         int lastLineWidth = (int) layout.getLineWidth(maxLineCount - 1);
         int lastCharacterIndex = layout.getLineEnd(maxLineCount - 1);
         int suffixWidth = (int) (Layout.getDesiredWidth(ellipsizeText, getPaint()) + Layout.getDesiredWidth(restSuffixText, getPaint())) + 1;
-        this.enableUpdateOriginText = false;
+        enableUpdateOriginText = false;
         if (lastLineWidth + suffixWidth > width) {
             int widthDiff = lastLineWidth + suffixWidth - width;
             int removedCharacterCount = computeRemovedEllipsizeEndCharacterCount(widthDiff, originalText.subSequence(0, lastCharacterIndex));
