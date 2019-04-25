@@ -28,6 +28,7 @@ dependencies {
 }
 
 publish {
+    userOrg = ''
     groupId = 'com.github.stepup18'
     repoName = 'customellipsizetextview'
     artifactId = 'customellipsizetextview'
